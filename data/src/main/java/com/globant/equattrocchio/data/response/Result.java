@@ -8,13 +8,13 @@ import java.util.List;
 public class Result {
     @SerializedName("images")
     @Expose
-    private List<Image> mImages = null;
+    private List<ImageEntity> mImages = null;
 
-    public List<Image> getImages() {
+    public List<ImageEntity> getImages() {
         return mImages;
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<ImageEntity> images) {
         this.mImages = images;
     }
 

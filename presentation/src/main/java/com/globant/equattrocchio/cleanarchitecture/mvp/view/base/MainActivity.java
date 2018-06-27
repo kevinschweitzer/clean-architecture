@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ImagesPresenter presenter;
     private GetLatestImagesUseCase getLatestImagesUseCase;
-    @BindView(R.id.tv_incoming_json) TextView tv;
+    //@BindView(R.id.tv_incoming_json) TextView tv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

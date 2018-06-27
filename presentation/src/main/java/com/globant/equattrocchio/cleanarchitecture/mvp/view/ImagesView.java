@@ -1,11 +1,14 @@
 package com.globant.equattrocchio.cleanarchitecture.mvp.view;
 
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.globant.equattrocchio.cleanarchitecture.R;
+import com.globant.equattrocchio.cleanarchitecture.mvp.view.adapter.ListViewAdapter;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.RxBus;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.CallServiceButtonObserver;
+import com.globant.equattrocchio.domain.model.Images;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -13,7 +16,7 @@ import butterknife.OnClick;
 
 public class ImagesView extends ActivityView {
 
-    @BindView(R.id.tv_incoming_json) TextView tvlabel;
+    @BindView(R.id.list_view) ListView listView;
 
     public ImagesView(AppCompatActivity activity) {
         super(activity);
@@ -21,7 +24,7 @@ public class ImagesView extends ActivityView {
     }
 
     public void showText(String text) {
-        tvlabel.setText(text);
+
     }
 
     @OnClick(R.id.btn_call_service)
@@ -30,6 +33,11 @@ public class ImagesView extends ActivityView {
     }
 
     public void showError() {
-        tvlabel.setText(R.string.connection_error);
+
+    }
+
+    public void setImages(Images images){
+        ListViewAdapter adapter = new ListViewAdapter(getContext(),images.getList());
+        listView.setAdapter(adapter);
     }
 }

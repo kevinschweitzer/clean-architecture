@@ -3,7 +3,7 @@ package com.globant.equattrocchio.data.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Image {
+public class ImageEntity {
     @SerializedName("id")
     @Expose
     private Integer id;
