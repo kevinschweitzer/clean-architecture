@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.globant.equattrocchio.cleanarchitecture.R;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.RxBus;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.ImageClickedObserver;
 import com.globant.equattrocchio.domain.model.Image;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ public class ListViewAdapter extends ArrayAdapter<Image> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        Image image = getItem(position);
+        final Image image = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.partial_card_view, parent, false);
@@ -43,8 +45,15 @@ public class ListViewAdapter extends ArrayAdapter<Image> {
         Glide.with(this.getContext()).load(image.getUrl()).into(imageView);
         textView.setText(image.getId()+"");
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RxBus.post(new ImageClickedObserver.ImageClicked(image.getId()));
+            }
+        });
+
         return convertView;
 
-
     }
+
 }

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Result {
+public class ImagesResponse {
     @SerializedName("images")
     @Expose
     private List<ImageEntity> mImages = null;

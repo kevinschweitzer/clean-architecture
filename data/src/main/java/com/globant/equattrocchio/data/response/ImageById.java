@@ -3,7 +3,8 @@ package com.globant.equattrocchio.data.response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ImageEntity{
+public class ImageById {
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -15,7 +16,13 @@ public class ImageEntity{
     private String largeUrl;
     @SerializedName("source_id")
     @Expose
-    private Integer sourceId;
+    private Object sourceId;
+    @SerializedName("copyright")
+    @Expose
+    private String copyright;
+    @SerializedName("site")
+    @Expose
+    private String site;
 
     public Integer getId() {
         return id;
@@ -41,12 +48,27 @@ public class ImageEntity{
         this.largeUrl = largeUrl;
     }
 
-    public Integer getSourceId() {
+    public Object getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(Integer sourceId) {
+    public void setSourceId(Object sourceId) {
         this.sourceId = sourceId;
     }
 
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
 }

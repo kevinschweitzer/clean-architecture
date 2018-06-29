@@ -1,16 +1,16 @@
 package com.globant.equattrocchio.domain.model;
 
+import java.io.Serializable;
 
-public class Image{
+public class CompleteImage  implements Serializable {
+
 
     private Integer id;
     private String url;
     private String largeUrl;
     private Object sourceId;
-
-    public Image(){
-
-    }
+    private String copyright;
+    private String site;
 
     public Integer getId() {
         return id;
@@ -42,5 +42,21 @@ public class Image{
 
     public void setSourceId(Object sourceId) {
         this.sourceId = sourceId;
+    }
+
+    public String getCopyright() {
+        return copyright;
+    }
+
+    public void setCopyright(String copyright) {
+        this.copyright = copyright;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
     }
 }

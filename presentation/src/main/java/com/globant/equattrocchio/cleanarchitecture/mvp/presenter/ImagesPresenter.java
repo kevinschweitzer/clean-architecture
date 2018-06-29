@@ -5,30 +5,32 @@ import android.app.Activity;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.RxBus;
 import com.globant.equattrocchio.cleanarchitecture.mvp.view.ImagesView;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.CallServiceButtonObserver;
-import com.globant.equattrocchio.data.ImagesServicesImpl;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.ImageClickedObserver;
+import com.globant.equattrocchio.domain.GetImageByIdUseCase;
 import com.globant.equattrocchio.domain.GetLatestImagesUseCase;
-import com.globant.equattrocchio.domain.model.Images;
-
+import com.globant.equattrocchio.domain.model.CompleteImage;
+import com.globant.equattrocchio.domain.model.Image;
+import java.util.List;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DefaultObserver;
 import io.reactivex.observers.DisposableObserver;
 
 public class ImagesPresenter {
 
     private ImagesView view;
     private GetLatestImagesUseCase getLatestImagesUseCase;
+    private GetImageByIdUseCase getImageByIdUseCase;
 
-
-    public ImagesPresenter(ImagesView view, GetLatestImagesUseCase getLatestImagesUseCase) {
+    public ImagesPresenter(ImagesView view, GetLatestImagesUseCase getLatestImagesUseCase, GetImageByIdUseCase getImageByIdUseCase) {
         this.view = view;
         this.getLatestImagesUseCase = getLatestImagesUseCase;
+        this.getImageByIdUseCase = getImageByIdUseCase;
     }
 
     private void onCallServiceButtonPressed() {
 
-        getLatestImagesUseCase.execute(new DisposableObserver<Images>() {
+        getLatestImagesUseCase.execute(new DisposableObserver<List<Image>>() {
             @Override
-            public void onNext(@NonNull Images images) {
+            public void onNext(@NonNull List<Image> images) {
                 view.setImages(images);
             }
 
@@ -43,9 +45,27 @@ public class ImagesPresenter {
             }
         },null);
 
-
-
         //todo acá tengo que llamar a la domain layer para que llame a la data layer y haga el llamdo al servicio
+    }
+
+    private void onImagePressed(int id){
+        getImageByIdUseCase.execute(new DisposableObserver<CompleteImage>() {
+            @Override
+            public void onNext(CompleteImage image) {
+                //Show image in fragment
+                view.showImageDialog(image);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                view.showError();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        },id);
     }
 
 
@@ -61,6 +81,13 @@ public class ImagesPresenter {
             @Override
             public void onEvent(CallServiceButtonPressed event) {
                 onCallServiceButtonPressed();
+            }
+        });
+
+        RxBus.subscribe(activity, new ImageClickedObserver() {
+            @Override
+            public void onEvent(ImageClicked value) {
+                onImagePressed(value.getId());
             }
         });
 
