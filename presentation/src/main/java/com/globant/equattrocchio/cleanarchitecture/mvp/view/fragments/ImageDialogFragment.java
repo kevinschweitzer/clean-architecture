@@ -11,14 +11,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.globant.equattrocchio.cleanarchitecture.R;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.RxBus;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.DeleteClickedObserver;
 import com.globant.equattrocchio.domain.model.CompleteImage;
 import com.globant.equattrocchio.domain.model.Image;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ImageDialogFragment extends DialogFragment {
 
+    private static final String IMAGE_KEY = "SOLO_IMAGE";
     @BindView(R.id.text_id) TextView idText;
     @BindView(R.id.text_url) TextView urlText;
     @BindView(R.id.text_site) TextView siteText;
@@ -27,7 +31,7 @@ public class ImageDialogFragment extends DialogFragment {
 
     public static ImageDialogFragment newInstance(CompleteImage image){
         Bundle args = new Bundle();
-        args.putSerializable("SOLO_IMAGE",image);
+        args.putSerializable(IMAGE_KEY,image);
         ImageDialogFragment fragment = new ImageDialogFragment();
         fragment.setArguments(args);
 
@@ -38,7 +42,7 @@ public class ImageDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         super.onCreateDialog(savedInstanceState);
-        CompleteImage image = (CompleteImage)getArguments().getSerializable("SOLO_IMAGE");
+        CompleteImage image = (CompleteImage)getArguments().getSerializable(IMAGE_KEY);
         if(image!=null) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.partial_image_dialog, null);
             ButterKnife.bind(this,view);
@@ -52,5 +56,11 @@ public class ImageDialogFragment extends DialogFragment {
 
         return null;
 
+    }
+
+    @OnClick(R.id.btn_delete)
+    public void onDeletedClicked(){
+        CompleteImage image = (CompleteImage)getArguments().getSerializable(IMAGE_KEY);
+        RxBus.post(new DeleteClickedObserver.DeleteClicked(image.getId()));
     }
 }

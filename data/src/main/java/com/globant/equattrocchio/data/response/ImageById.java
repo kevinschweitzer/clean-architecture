@@ -5,10 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class ImageById {
 
-    @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("url")
     @Expose
     private String url;
     @SerializedName("large_url")
@@ -17,10 +15,8 @@ public class ImageById {
     @SerializedName("source_id")
     @Expose
     private Object sourceId;
-    @SerializedName("copyright")
     @Expose
     private String copyright;
-    @SerializedName("site")
     @Expose
     private String site;
 

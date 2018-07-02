@@ -6,7 +6,7 @@ public class Image{
     private Integer id;
     private String url;
     private String largeUrl;
-    private Object sourceId;
+    private Integer sourceId;
 
     public Image(){
 
@@ -36,11 +36,11 @@ public class Image{
         this.largeUrl = largeUrl;
     }
 
-    public Object getSourceId() {
+    public Integer getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(Object sourceId) {
+    public void setSourceId(Integer sourceId) {
         this.sourceId = sourceId;
     }
 }

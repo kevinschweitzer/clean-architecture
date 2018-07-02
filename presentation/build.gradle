@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'realm-android'
+
+
+realm {
+    syncEnabled = true;
+}
+
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "com.globant.equattrocchio.cleanarchitecture"
         minSdkVersion 19
@@ -16,6 +23,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    android {
+        configurations.all {
+            resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.2'
         }
     }
 }

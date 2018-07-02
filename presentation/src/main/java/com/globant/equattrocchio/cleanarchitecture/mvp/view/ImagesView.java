@@ -10,6 +10,8 @@ import com.globant.equattrocchio.cleanarchitecture.mvp.view.adapter.RecyclerView
 import com.globant.equattrocchio.cleanarchitecture.mvp.view.fragments.ImageDialogFragment;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.RxBus;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.CallServiceButtonObserver;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.RefreshClickedObserver;
+import com.globant.equattrocchio.data.response.ImageEntity;
 import com.globant.equattrocchio.domain.model.CompleteImage;
 import com.globant.equattrocchio.domain.model.Image;
 
@@ -18,6 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.RealmResults;
 
 public class ImagesView extends ActivityView {
 
@@ -51,8 +54,23 @@ public class ImagesView extends ActivityView {
         recyclerView.setAdapter(adapter);
     }
 
+
     public void showImageDialog(CompleteImage image){
         FragmentManager fragmentManager = getFragmentManager();
         ImageDialogFragment.newInstance(image).show(fragmentManager,"fragment");
     }
+
+    @OnClick(R.id.btn_refresh)
+    public void saveImages(){
+
+        RxBus.post(new RefreshClickedObserver.RefreshClicked());
+    }
+
+    public void showToast(int stringId){
+        String text = getActivity().getResources().getString(stringId);
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+
+
 }
