@@ -14,7 +14,7 @@ public class ImageById {
     private String largeUrl;
     @SerializedName("source_id")
     @Expose
-    private Object sourceId;
+    private String sourceId;
     @Expose
     private String copyright;
     @Expose
@@ -44,11 +44,11 @@ public class ImageById {
         this.largeUrl = largeUrl;
     }
 
-    public Object getSourceId() {
+    public String getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(Object sourceId) {
+    public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
     }
 

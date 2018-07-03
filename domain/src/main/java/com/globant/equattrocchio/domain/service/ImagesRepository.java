@@ -7,7 +7,7 @@ import java.util.List;
 
 import io.realm.RealmChangeListener;
 
-public interface ImagesLocal {
+public interface ImagesRepository {
 
      void addImages(List<Image> images);
 

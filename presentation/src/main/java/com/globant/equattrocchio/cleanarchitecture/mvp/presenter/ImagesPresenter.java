@@ -49,7 +49,7 @@ public class ImagesPresenter {
         refreshImagesUseCase.addChangeListener(changeListener);
     }
 
-    private void onCallServiceButtonPressed() {
+    public void onCallServiceButtonPressed() {
 
         getLatestImagesUseCase.execute(new DisposableObserver<List<Image>>() {
             @Override
@@ -71,28 +71,12 @@ public class ImagesPresenter {
         //todo acá tengo que llamar a la domain layer para que llame a la data layer y haga el llamdo al servicio
     }
 
-    private void onImagePressed(int id){
-        getImageByIdUseCase.execute(new DisposableObserver<CompleteImage>() {
-            @Override
-            public void onNext(CompleteImage image) {
-                //Show image in fragment
-                view.showImageDialog(image);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                view.showError();
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        },id);
+    public void onImagePressed(int id){
+        view.showImageDialog(id);
     }
 
 
-    private void onRefreshClicked(){
+    public void onRefreshClicked(){
         saveImagesUseCase.execute(new DisposableObserver<Boolean>() {
             @Override
             public void onNext(Boolean aBoolean) {
@@ -111,9 +95,7 @@ public class ImagesPresenter {
         },null);
     }
 
-    private void onDeleteClicked(int id){
-        refreshImagesUseCase.delete(id);
-    }
+
 
     public void register() {
         Activity activity = view.getActivity();
@@ -143,12 +125,6 @@ public class ImagesPresenter {
             }
         });
 
-        RxBus.subscribe(activity, new DeleteClickedObserver() {
-            @Override
-            public void onEvent(DeleteClicked value) {
-                onDeleteClicked(value.getId());
-            }
-        });
 
     }
 

@@ -38,12 +38,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.partial_card_view,parent,false);
-        return new ViewHolder(parent,v,images);
+        return new ViewHolder(parent,v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Image image = images.get(position);
+        holder.setImage(image);
         holder.getIdTextView().setText(image.getId()+"");
         Glide.with(holder.getImageView().getContext()).load(image.getUrl()).into(holder.getImageView());
     }
@@ -58,14 +59,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
-        private final List<Image> images;
+        private Image image;
         @BindView (R.id.text_view) TextView idTextView;
         @BindView(R.id.image_view) ImageView imageView;
 
-        public ViewHolder(ViewGroup parent,View view, List<Image> images) {
+        public ViewHolder(ViewGroup parent,View view) {
             super(view);
-            this.images = images;
+            this.image = image;
             ButterKnife.bind(this,view);
+        }
+
+        public void setImage(Image image){
+            this.image = image;
         }
 
         public TextView getIdTextView(){
@@ -80,7 +85,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         @OnClick(R.id.card_view)
         public void onHolderClicked(View view){
-            Image image = images.get(getAdapterPosition());
             RxBus.post(new ImageClickedObserver.ImageClicked(image.getId()));
         }
 

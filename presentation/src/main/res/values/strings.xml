@@ -7,4 +7,5 @@
     <string name="refresh_success">Se ha actualizado correctamente</string>
     <string name="refresh_error">Ha ocurrido un error mientras se actualiaba la base de datos</string>
     <string name="btn_delete">Delete</string>
+    <string name="error_image_id">Error obteniendo la imagen</string>
 </resources>

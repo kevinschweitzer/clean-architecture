@@ -1,23 +1,18 @@
 package com.globant.equattrocchio.data;
 
 import com.globant.equattrocchio.data.mapper.ImageByIdMapper;
-import com.globant.equattrocchio.data.mapper.ImageMapper;
 import com.globant.equattrocchio.data.mapper.ImagesResponseMapper;
 import com.globant.equattrocchio.data.response.ImageById;
-import com.globant.equattrocchio.data.response.ImageEntity;
 import com.globant.equattrocchio.data.response.ImagesResponse;
 import com.globant.equattrocchio.data.service.api.SplashbaseApi;
 import com.globant.equattrocchio.domain.model.CompleteImage;
 import com.globant.equattrocchio.domain.model.Image;
-import com.globant.equattrocchio.domain.service.ImagesLocal;
+import com.globant.equattrocchio.domain.service.ImagesRepository;
 import com.globant.equattrocchio.domain.service.ImagesServices;
 
 import java.util.List;
 
 import io.reactivex.Observer;
-import io.reactivex.observers.DisposableObserver;
-import io.realm.Realm;
-import io.realm.RealmObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -86,7 +81,7 @@ public class ImagesServicesImpl implements ImagesServices {
             public void onResponse(Call<ImagesResponse> call, Response<ImagesResponse> response) {
                 ImagesResponseMapper mapper = new ImagesResponseMapper();
                 List<Image> images = mapper.map(response.body());
-                ImagesLocal imagesLocal = new ImagesLocalImpl();
+                ImagesRepository imagesLocal = new ImagesRepositoryImpl();
                 imagesLocal.addImages(images);
             }
 

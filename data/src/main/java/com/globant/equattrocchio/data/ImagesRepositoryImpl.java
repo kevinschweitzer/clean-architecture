@@ -3,16 +3,15 @@ package com.globant.equattrocchio.data;
 import com.globant.equattrocchio.data.mapper.ImageMapper;
 import com.globant.equattrocchio.data.response.ImageEntity;
 import com.globant.equattrocchio.domain.model.Image;
-import com.globant.equattrocchio.domain.service.ImagesLocal;
+import com.globant.equattrocchio.domain.service.ImagesRepository;
 
 import java.util.List;
-import java.util.Observer;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-public class ImagesLocalImpl implements ImagesLocal {
+public class ImagesRepositoryImpl implements ImagesRepository {
 
     private static final String ID_FIELD = "id";
     private RealmResults<ImageEntity> images;
@@ -47,8 +46,9 @@ public class ImagesLocalImpl implements ImagesLocal {
 
         realm.beginTransaction();
 
-        ImageEntity imageEntity = realm.where(ImageEntity.class).equalTo(ID_FIELD, id).findFirst();
-        imageEntity.deleteFromRealm();
+        ImageEntity imageEntity = realm.where(ImageEntity.class).equalTo("id", id).findFirst();
+
+        if(imageEntity!=null) imageEntity.deleteFromRealm();
 
         realm.commitTransaction();
     }

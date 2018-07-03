@@ -1,14 +1,14 @@
 package com.globant.equattrocchio.domain;
 
-import com.globant.equattrocchio.domain.service.ImagesLocal;
+import com.globant.equattrocchio.domain.service.ImagesRepository;
 
 import io.realm.RealmChangeListener;
 
 public class RefreshImagesUseCase {
 
-    private ImagesLocal imagesLocal;
+    private ImagesRepository imagesLocal;
 
-    public RefreshImagesUseCase(ImagesLocal imagesLocal){
+    public RefreshImagesUseCase(ImagesRepository imagesLocal){
         this.imagesLocal = imagesLocal;
     }
 
