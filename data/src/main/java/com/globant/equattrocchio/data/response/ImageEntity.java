@@ -4,14 +4,15 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
 import io.realm.annotations.RealmModule;
 
-@RealmClass
 public class ImageEntity extends RealmObject{
     @Expose
-    private Integer id;
+    @PrimaryKey
+    private long id;
     @Expose
     private String url;
     @SerializedName("large_url")
@@ -21,11 +22,11 @@ public class ImageEntity extends RealmObject{
     @Expose
     private Integer sourceId;
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

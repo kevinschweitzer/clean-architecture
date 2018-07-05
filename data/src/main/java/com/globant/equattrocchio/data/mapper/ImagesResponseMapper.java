@@ -13,10 +13,12 @@ public class ImagesResponseMapper {
 
     public List<Image> map(ImagesResponse result){
         List<Image> images = new ArrayList<Image>();
-        for (ImageEntity i: result.getImages()) {
-            ImageMapper imageMapper = new ImageMapper();
-            Image image = imageMapper.map(i);
-            images.add(image);
+        if(result!=null) {
+            for (ImageEntity i : result.getImages()) {
+                ImageMapper imageMapper = new ImageMapper();
+                Image image = imageMapper.map(i);
+                images.add(image);
+            }
         }
         return images;
     }

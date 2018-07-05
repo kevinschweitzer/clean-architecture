@@ -5,13 +5,13 @@ public abstract class ImageClickedObserver extends BusObserver<ImageClickedObser
 
     public static class ImageClicked{
 
-        private int id;
+        private long id;
 
-        public ImageClicked(int id){
+        public ImageClicked(long id){
             this.id = id;
         }
 
-        public int getId(){
+        public long getId(){
             return id;
         }
     }

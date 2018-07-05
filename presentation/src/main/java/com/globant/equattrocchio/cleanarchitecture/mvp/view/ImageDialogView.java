@@ -1,12 +1,7 @@
 package com.globant.equattrocchio.cleanarchitecture.mvp.view;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +16,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ImageDialogView {
+public class ImageDialogView extends DialogFragmentView {
 
-    private DialogFragment fragment;
     @BindView(R.id.text_id) TextView idText;
     @BindView(R.id.text_url) TextView urlText;
     @BindView(R.id.text_site) TextView siteText;
@@ -31,17 +25,14 @@ public class ImageDialogView {
     @BindView(R.id.image_view) ImageView imageView;
 
     public ImageDialogView(DialogFragment fragment){
-        this.fragment = fragment;
-    }
-
-    public Activity getActivity(){
-        return fragment.getActivity();
+        super(fragment);
     }
 
     public void showImage(CompleteImage image){
-        if(image!=null) {
-            ButterKnife.bind(this,fragment.getDialog());
-            Glide.with(fragment.getActivity()).load(image.getUrl()).into(imageView);
+       // Activity activity = fragment.getActivity();
+        if(image!=null && getFragment()!=null) {
+            ButterKnife.bind(this,getFragment().getDialog());
+            Glide.with(getFragment()).load(image.getUrl()).into(imageView);
             idText.setText(image.getId()+"");
             urlText.setText(image.getUrl());
             siteText.setText(image.getSite());
@@ -56,6 +47,11 @@ public class ImageDialogView {
     }
 
     public void showMessage(int resourceId) {
-        Toast.makeText(fragment.getActivity(),resourceId,Toast.LENGTH_SHORT).show();
+        Activity activity = getFragment().getActivity();
+        if(activity!=null)  Toast.makeText(activity,resourceId,Toast.LENGTH_SHORT).show();
+    }
+
+    public void hide() {
+        getFragment().dismiss();
     }
 }

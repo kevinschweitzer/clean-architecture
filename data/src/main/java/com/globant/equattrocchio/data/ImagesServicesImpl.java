@@ -2,7 +2,7 @@ package com.globant.equattrocchio.data;
 
 import com.globant.equattrocchio.data.mapper.ImageByIdMapper;
 import com.globant.equattrocchio.data.mapper.ImagesResponseMapper;
-import com.globant.equattrocchio.data.response.ImageById;
+import com.globant.equattrocchio.data.response.ImageByIdResponse;
 import com.globant.equattrocchio.data.response.ImagesResponse;
 import com.globant.equattrocchio.data.service.api.SplashbaseApi;
 import com.globant.equattrocchio.domain.model.CompleteImage;
@@ -49,20 +49,20 @@ public class ImagesServicesImpl implements ImagesServices {
     }
 
     @Override
-    public void getImageById(final Observer<CompleteImage> observer, int id) {
+    public void getImageById(final Observer<CompleteImage> observer, long id) {
         Retrofit retrofit = buildRetrofit();
         SplashbaseApi api = retrofit.create(SplashbaseApi.class);
-        Call<ImageById> call = api.getImageById(id);
+        Call<ImageByIdResponse> call = api.getImageById(id);
 
-        call.enqueue(new Callback<ImageById>(){
+        call.enqueue(new Callback<ImageByIdResponse>(){
             @Override
-            public void onResponse(Call<ImageById> call, Response<ImageById> response) {
+            public void onResponse(Call<ImageByIdResponse> call, Response<ImageByIdResponse> response) {
                 CompleteImage image = (new ImageByIdMapper()).map(response.body());
                 observer.onNext(image);
             }
 
             @Override
-            public void onFailure(Call<ImageById> call, Throwable t) {
+            public void onFailure(Call<ImageByIdResponse> call, Throwable t) {
                 observer.onError(t);
             }
         });
@@ -79,10 +79,17 @@ public class ImagesServicesImpl implements ImagesServices {
         call.enqueue(new Callback<ImagesResponse>() {
             @Override
             public void onResponse(Call<ImagesResponse> call, Response<ImagesResponse> response) {
-                ImagesResponseMapper mapper = new ImagesResponseMapper();
-                List<Image> images = mapper.map(response.body());
-                ImagesRepository imagesLocal = new ImagesRepositoryImpl();
-                imagesLocal.addImages(images);
+                if(response.body()!=null){
+                    ImagesResponseMapper mapper = new ImagesResponseMapper();
+                    List<Image> images = mapper.map(response.body());
+                    ImagesRepository imagesLocal = new ImagesRepositoryImpl();
+                    imagesLocal.addImages(images);
+                    observer.onNext(true);
+                }
+                else{
+                    observer.onNext(false);
+                }
+
             }
 
             @Override

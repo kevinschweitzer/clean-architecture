@@ -1,6 +1,8 @@
 package com.globant.equattrocchio.cleanarchitecture.mvp.presenter;
 
 import android.app.Activity;
+import android.util.Log;
+import android.view.Display;
 
 import com.globant.equattrocchio.cleanarchitecture.R;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.RxBus;
@@ -9,6 +11,7 @@ import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.CallServic
 import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.DeleteClickedObserver;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.ImageClickedObserver;
 import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.RefreshClickedObserver;
+import com.globant.equattrocchio.cleanarchitecture.util.bus.observers.SaveInstanceObserver;
 import com.globant.equattrocchio.data.mapper.ImageMapper;
 import com.globant.equattrocchio.data.response.ImageEntity;
 import com.globant.equattrocchio.domain.GetImageByIdUseCase;
@@ -17,6 +20,8 @@ import com.globant.equattrocchio.domain.RefreshImagesUseCase;
 import com.globant.equattrocchio.domain.SaveImagesUseCase;
 import com.globant.equattrocchio.domain.model.CompleteImage;
 import com.globant.equattrocchio.domain.model.Image;
+import com.google.gson.Gson;
+
 import java.util.List;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
@@ -43,6 +48,7 @@ public class ImagesPresenter {
             public void onChange(RealmResults<ImageEntity> images) {
                 //Refresh View
                 List<Image> imageList = (new ImageMapper()).map(images);
+                Log.i("Images changeListener",(new Gson()).toJson(imageList));
                 view.setImages(imageList);
             }
         };
@@ -59,7 +65,7 @@ public class ImagesPresenter {
 
             @Override
             public void onError(@NonNull Throwable e) {
-               view.showError();
+               view.showToast(R.string.connection_error);
             }
 
             @Override
@@ -71,7 +77,7 @@ public class ImagesPresenter {
         //todo acá tengo que llamar a la domain layer para que llame a la data layer y haga el llamdo al servicio
     }
 
-    public void onImagePressed(int id){
+    public void onImagePressed(long id){
         view.showImageDialog(id);
     }
 
@@ -96,6 +102,10 @@ public class ImagesPresenter {
     }
 
 
+    public void conserveInstance(){
+        List<Image> images = refreshImagesUseCase.getImagesFromRepository();
+        view.setImages(images);
+    }
 
     public void register() {
         Activity activity = view.getActivity();
@@ -122,6 +132,13 @@ public class ImagesPresenter {
             @Override
             public void onEvent(RefreshClicked value) {
                 onRefreshClicked();
+            }
+        });
+
+        RxBus.subscribe(activity, new SaveInstanceObserver() {
+            @Override
+            public void onEvent(SaveInstance value) {
+                conserveInstance();
             }
         });
 

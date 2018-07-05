@@ -6,7 +6,7 @@ import com.globant.equattrocchio.domain.service.ImagesServices;
 
 import io.reactivex.observers.DisposableObserver;
 
-public class GetImageByIdUseCase extends UseCase<CompleteImage,Integer> {
+public class GetImageByIdUseCase extends UseCase<CompleteImage,Long> {
 
     private ImagesServices imagesServices;
 
@@ -16,7 +16,7 @@ public class GetImageByIdUseCase extends UseCase<CompleteImage,Integer> {
     }
 
     @Override
-    void buildUseCaseObservable(DisposableObserver<CompleteImage> observer, Integer i) {
+    void buildUseCaseObservable(DisposableObserver<CompleteImage> observer, Long i) {
         imagesServices.getImageById(observer,i);
     }
 }

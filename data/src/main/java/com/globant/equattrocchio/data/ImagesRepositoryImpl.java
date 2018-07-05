@@ -1,9 +1,12 @@
 package com.globant.equattrocchio.data;
 
+import android.util.Log;
+
 import com.globant.equattrocchio.data.mapper.ImageMapper;
 import com.globant.equattrocchio.data.response.ImageEntity;
 import com.globant.equattrocchio.domain.model.Image;
 import com.globant.equattrocchio.domain.service.ImagesRepository;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -21,11 +24,12 @@ public class ImagesRepositoryImpl implements ImagesRepository {
     public void addImages(List<Image> images) {
         ImageMapper mapper = new ImageMapper();
         Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.deleteAll();
         try {
-            realm.beginTransaction();
             for (Image image : images) {
                 ImageEntity imageEntity = mapper.map(image);
-                realm.copyToRealm(imageEntity);
+                realm.insertOrUpdate(imageEntity);
             }
             realm.commitTransaction();
         } finally {
@@ -41,16 +45,36 @@ public class ImagesRepositoryImpl implements ImagesRepository {
     }
 
     @Override
-    public void delete(int id){
+    public void delete(long id){
         Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
 
-        ImageEntity imageEntity = realm.where(ImageEntity.class).equalTo("id", id).findFirst();
+        ImageEntity imageEntity = realm.where(ImageEntity.class).equalTo(ID_FIELD, id).findFirst();
 
         if(imageEntity!=null) imageEntity.deleteFromRealm();
 
         realm.commitTransaction();
+
+    }
+
+    @Override
+    public void deleteAll() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<ImageEntity> results = realm.where(ImageEntity.class).findAll();
+
+        realm.beginTransaction();
+
+        results.deleteAllFromRealm();
+
+        realm.commitTransaction();
+    }
+
+    @Override
+    public List<Image> getImagesFromRepository() {
+        Realm realm = Realm.getDefaultInstance();
+
+        return (new ImageMapper()).map(realm.where(ImageEntity.class).findAll());
     }
 
 

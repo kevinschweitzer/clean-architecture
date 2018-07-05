@@ -18,9 +18,9 @@ public class ImageDialogPresenter {
     private ImageDialogView view;
     private GetImageByIdUseCase getImageByIdUseCase;
     private RefreshImagesUseCase refreshImagesUseCase;
-    private int imageId;
+    private long imageId;
 
-    public ImageDialogPresenter(ImageDialogView view, GetImageByIdUseCase getImageByIdUseCase, RefreshImagesUseCase refreshImagesUseCase, int imageId){
+    public ImageDialogPresenter(ImageDialogView view, GetImageByIdUseCase getImageByIdUseCase, RefreshImagesUseCase refreshImagesUseCase, long imageId){
         this.view = view;
         this.getImageByIdUseCase = getImageByIdUseCase;
         this.refreshImagesUseCase = refreshImagesUseCase;
@@ -28,7 +28,7 @@ public class ImageDialogPresenter {
         getImageById(imageId);
     }
 
-    public void getImageById(int id){
+    public void getImageById(long id){
         getImageByIdUseCase.execute(new DisposableObserver<CompleteImage>() {
             @Override
             public void onNext(CompleteImage image) {
@@ -51,16 +51,21 @@ public class ImageDialogPresenter {
 
     public void onDeleteClicked(){
         refreshImagesUseCase.delete(imageId);
+        view.hide();
     }
 
 
     public void register() {
-        RxBus.subscribe(view.getActivity(), new DeleteClickedObserver() {
-            @Override
-            public void onEvent(DeleteClicked value) {
-                onDeleteClicked();
-            }
-        });
+        Activity activity = view.getFragment().getActivity();
+        if(activity!=null){
+            RxBus.subscribe(activity, new DeleteClickedObserver() {
+                @Override
+                public void onEvent(DeleteClicked value) {
+                    onDeleteClicked();
+                }
+            });
+        }
+
 
     }
 

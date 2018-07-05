@@ -1,6 +1,5 @@
 package com.globant.equattrocchio.cleanarchitecture.mvp.view.base;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +24,7 @@ public class ImageDialogFragment extends DialogFragment {
     private static final String ID_KEY = "ID_IMAGE";
 
 
-    public static ImageDialogFragment newInstance(int id){
+    public static ImageDialogFragment newInstance(long id){
         Bundle args = new Bundle();
         args.putSerializable(ID_KEY,id);
         ImageDialogFragment fragment = new ImageDialogFragment();
@@ -48,7 +47,7 @@ public class ImageDialogFragment extends DialogFragment {
         ImagesRepository imagesRepository = new ImagesRepositoryImpl();
         GetImageByIdUseCase getImageByIdUseCase = new GetImageByIdUseCase(imagesServices);
         RefreshImagesUseCase refreshImagesUseCase = new RefreshImagesUseCase(imagesRepository);
-        int imageId = (int)getArguments().getSerializable(ID_KEY);
+        long imageId = (long)getArguments().getSerializable(ID_KEY);
         presenter = new ImageDialogPresenter(new ImageDialogView(this),getImageByIdUseCase,refreshImagesUseCase,imageId);
     }
 

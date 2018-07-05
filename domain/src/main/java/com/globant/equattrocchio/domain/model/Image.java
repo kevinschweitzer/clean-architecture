@@ -3,7 +3,7 @@ package com.globant.equattrocchio.domain.model;
 
 public class Image{
 
-    private Integer id;
+    private long id;
     private String url;
     private String largeUrl;
     private Integer sourceId;
@@ -12,11 +12,11 @@ public class Image{
 
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 

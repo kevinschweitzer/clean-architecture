@@ -11,7 +11,7 @@ public interface ImagesServices {
 
     void getLatestImages(Observer<List<Image>> observer);
 
-    void getImageById(Observer<CompleteImage> observer, int id);
+    void getImageById(Observer<CompleteImage> observer, long id);
 
     void saveImages(Observer<Boolean> observer);
 }

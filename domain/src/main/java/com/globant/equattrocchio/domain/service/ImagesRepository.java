@@ -13,5 +13,10 @@ public interface ImagesRepository {
 
      void setOnChangeListener(RealmChangeListener changeListener);
 
-     public void delete(int id);
+     public void delete(long id);
+
+     public void deleteAll();
+
+     public List<Image> getImagesFromRepository();
+
 }
