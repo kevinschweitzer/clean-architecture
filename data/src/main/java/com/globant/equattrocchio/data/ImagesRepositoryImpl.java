@@ -22,19 +22,21 @@ public class ImagesRepositoryImpl implements ImagesRepository {
 
     @Override
     public void addImages(List<Image> images) {
-        ImageMapper mapper = new ImageMapper();
+
         Realm realm = Realm.getDefaultInstance();
+
         realm.beginTransaction();
         realm.deleteAll();
-        try {
-            for (Image image : images) {
-                ImageEntity imageEntity = mapper.map(image);
-                realm.insertOrUpdate(imageEntity);
-            }
-            realm.commitTransaction();
-        } finally {
-            realm.close();
+        for (Image image : images) {
+            ImageEntity imageEntity = realm.createObject(ImageEntity.class,image.getId());
+            //imageEntity.setId(image.getId());
+            imageEntity.setUrl(image.getUrl());
+            imageEntity.setLargeUrl(image.getLargeUrl());
+            imageEntity.setSourceId(image.getSourceId());
+            realm.insertOrUpdate(imageEntity);
         }
+            realm.commitTransaction();
+            realm.close();
     }
 
     @Override

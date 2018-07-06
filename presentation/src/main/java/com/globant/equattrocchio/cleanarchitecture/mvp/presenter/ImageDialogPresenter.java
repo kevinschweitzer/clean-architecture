@@ -33,12 +33,12 @@ public class ImageDialogPresenter {
             @Override
             public void onNext(CompleteImage image) {
                 //Show image in fragment
-                view.showImage(image);
+                showImageInFragment(image);
             }
 
             @Override
             public void onError(Throwable e) {
-                view.showMessage(R.string.error_image_id);
+                showError(R.string.error_image_id);
             }
 
             @Override
@@ -48,6 +48,13 @@ public class ImageDialogPresenter {
         },id);
     }
 
+    public void showImageInFragment(CompleteImage image){
+        view.showImage(image);
+    }
+
+    public void showError(int stringId){
+        view.showMessage(stringId);
+    }
 
     public void onDeleteClicked(){
         refreshImagesUseCase.delete(imageId);
