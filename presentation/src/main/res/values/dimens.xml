@@ -3,4 +3,8 @@
     <dimen name="tv_height">200dp</dimen>
     <dimen name="btn_widht">368dp</dimen>
     <dimen name="btn_height">48dp</dimen>
+
+    <dimen name="card_width">300dp</dimen>
+    <dimen name="card_height">300dp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
 </resources>
