@@ -27,6 +27,7 @@ public class ImageDialogPresenterTest {
     @Captor ArgumentCaptor<DisposableObserver<CompleteImage>> completeImageObserverCaptor;
     @Mock CompleteImage image;
     @Mock ImageDialogPresenter presenter;
+    @Mock Throwable error;
     private final static long imageId = 1;
     private final static int resourceId = R.string.app_name;
 
@@ -37,11 +38,19 @@ public class ImageDialogPresenterTest {
     }
 
     @Test
-    public void getImageByIdTest() {
+    public void getImageByIdSuccessTest() {
         //Don't need to call the method because it is called in the constructor
         verify(getImageByIdUseCase).execute(completeImageObserverCaptor.capture(),eq(imageId));
         completeImageObserverCaptor.getValue().onNext(image);
         verify(view).showImage(image);
+    }
+
+    @Test
+    public void setGetImageByIdFailUseCase(){
+        //Don't need to call the method because it is called in the constructor
+        verify(getImageByIdUseCase).execute(completeImageObserverCaptor.capture(),eq(imageId));
+        completeImageObserverCaptor.getValue().onError(error);
+        verify(view).showMessage(R.string.error_image_id);
     }
 
     @Test

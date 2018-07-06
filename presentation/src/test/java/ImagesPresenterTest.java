@@ -8,6 +8,7 @@ import com.globant.equattrocchio.domain.RefreshImagesUseCase;
 import com.globant.equattrocchio.domain.SaveImagesUseCase;
 import com.globant.equattrocchio.domain.model.Image;
 
+import net.bytebuddy.implementation.bytecode.Throw;
 import net.bytebuddy.matcher.NullMatcher;
 
 import org.junit.Before;
@@ -39,9 +40,11 @@ public class ImagesPresenterTest {
     @Mock SaveImagesUseCase saveImagesUseCase;
     @Mock RefreshImagesUseCase refreshImagesUseCase;
     @Mock List<Image> images;
+    @Mock Throwable error;
     @Captor ArgumentCaptor<CallServiceButtonObserver> callServiceButtonObserverCaptor;
     @Captor ArgumentCaptor<DisposableObserver<List<Image>>> listImagesObserverCaptor;
     @Captor ArgumentCaptor<DisposableObserver<Boolean>> booleanObserverCaptor;
+
     private ImagesPresenter presenter;
 
     @Before
@@ -51,13 +54,23 @@ public class ImagesPresenterTest {
     }
 
    @Test
-    public void onCallServiceButtonPressedTest() {
+    public void onCallServiceButtonPressedSuccessTest() {
         presenter.onCallServiceButtonPressed();
 
         verify(getLatestImagesUseCase).execute(listImagesObserverCaptor.capture(),eq((Void)null));
 
         listImagesObserverCaptor.getValue().onNext(images);
         verify(view).setImages(images);
+    }
+
+    @Test
+    public void onCallServiceButtonPressedFailTest(){
+        presenter.onCallServiceButtonPressed();
+
+        verify(getLatestImagesUseCase).execute(listImagesObserverCaptor.capture(),eq((Void)null));
+
+        listImagesObserverCaptor.getValue().onError(error);
+        verify(view).showToast(R.string.connection_error);
     }
 
 
@@ -76,21 +89,31 @@ public class ImagesPresenterTest {
     }
 
     @Test
-    public void onRefreshClickedTest(){
+    public void onRefreshClickedSuccessTest(){
         presenter.onRefreshClicked();
 
         verify(saveImagesUseCase).execute(booleanObserverCaptor.capture(),eq((Void)null));
+        booleanObserverCaptor.getValue().onNext(any(Boolean.class));
+        verify(view).showToast(anyInt());
     }
 
     @Test
-    public void refreshClickedSuccessTest(){
+    public void onRefreshClickedFailTest(){
+        presenter.onRefreshClicked();
+        verify(saveImagesUseCase).execute(booleanObserverCaptor.capture(),eq((Void)null));
+        booleanObserverCaptor.getValue().onError(error);
+        verify(view).showToast(R.string.refresh_error);
+    }
+
+    @Test
+    public void onNextRefreshClickedTrueTest(){
         presenter.onNextRefreshClicked(true);
 
         verify(view).showToast(R.string.refresh_success);
     }
 
     @Test
-    public void refreshClickedFailTest(){
+    public void onNextRefreshClickedFalseTest(){
         presenter.onNextRefreshClicked(false);
 
         verify(view).showToast(R.string.refresh_error);
