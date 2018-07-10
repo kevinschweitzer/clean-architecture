@@ -26,7 +26,7 @@ public class ImageDialogPresenterTest {
     @Mock GetImageByIdUseCase getImageByIdUseCase;
     @Captor ArgumentCaptor<DisposableObserver<CompleteImage>> completeImageObserverCaptor;
     @Mock CompleteImage image;
-    @Mock ImageDialogPresenter presenter;
+    private ImageDialogPresenter presenter;
     @Mock Throwable error;
     private final static long imageId = 1;
     private final static int resourceId = R.string.app_name;
