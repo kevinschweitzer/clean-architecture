@@ -60,12 +60,12 @@ public class ImagesPresenter {
         getLatestImagesUseCase.execute(new DisposableObserver<List<Image>>() {
             @Override
             public void onNext(@NonNull List<Image> images) {
-                view.setImages(images);
+                setImagesInView(images);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-               view.showToast(R.string.connection_error);
+               showError(R.string.connection_error);
             }
 
             @Override
@@ -77,6 +77,10 @@ public class ImagesPresenter {
         //todo acá tengo que llamar a la domain layer para que llame a la data layer y haga el llamdo al servicio
     }
 
+    public void setImagesInView(List<Image> images){
+        view.setImages(images);
+    }
+
     public void onImagePressed(long id){
         view.showImageDialog(id);
     }
@@ -86,12 +90,12 @@ public class ImagesPresenter {
         saveImagesUseCase.execute(new DisposableObserver<Boolean>() {
             @Override
             public void onNext(Boolean aBoolean) {
-                if(aBoolean) view.showToast(R.string.refresh_success);
+                onNextRefreshClicked(aBoolean);
             }
 
             @Override
             public void onError(Throwable e) {
-                view.showToast(R.string.refresh_error);
+                showError(R.string.refresh_error);
             }
 
             @Override
@@ -101,6 +105,20 @@ public class ImagesPresenter {
         },null);
     }
 
+
+    public void onNextRefreshClicked(boolean aBoolean){
+        if(aBoolean){
+            view.showToast(R.string.refresh_success);
+        }
+        else{
+            view.showToast(R.string.refresh_error);
+        }
+    }
+
+    public void showError(int stringId){
+        view.showToast(stringId);
+
+    }
 
     public void conserveInstance(){
         List<Image> images = refreshImagesUseCase.getImagesFromRepository();
